@@ -1,0 +1,19 @@
+Node.js version v25.2.1 detected.
+Odd numbered Node.js versions will not enter LTS status and should not be used for production. For more information, please see https://nodejs.org/en/about/previous-releases/.
+[33mΓ¥»[39m Building...
+[32mΓ£ö[39m Building...
+[35mPrerendered 0 static routes.[39m
+Application bundle generation failed. [5.456 seconds] - 2026-02-21T04:22:17.493Z
+
+Γ£ÿ [ERROR] @use rules must be written before any other rules.
+  Γò╖
+4 Γöé @use '@angular/material' as mat;
+  Γöé ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  Γò╡
+  src\styles.scss 4:1  root stylesheet [plugin angular-sass]
+
+    angular:styles/global:styles:1:8:
+      1 Γöé @import 'src/styles.scss';
+        Γò╡         ~~~~~~~~~~~~~~~~~
+
+

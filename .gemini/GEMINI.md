@@ -54,3 +54,180 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 - Design services around a single responsibility
 - Use the `providedIn: 'root'` option for singleton services
 - Use the `inject()` function instead of constructor injection
+
+---
+
+## 🎨 Design System – Colors (MANDATORY)
+
+This project uses a **strict global semantic color system**.
+
+🚨 AI MUST FOLLOW THESE RULES:
+
+* Never invent new colors.
+* Never hardcode hex values outside this list.
+* Never use random Tailwind colors.
+* Never inline color styles in components.
+* All UI colors must reference these tokens only.
+* Always use CSS variables (`var(--color-*)`).
+* Must support dynamic theme switching.
+* If a required color is missing → STOP and request approval.
+
+---
+
+# 🎯 Approved Color Tokens
+
+## Primary (Brand)
+
+* primary-main: `#CAC7FF`
+* primary-light: `#E4E2FF`
+* primary-dark: `#A5A1E8`
+
+---
+
+## Secondary (Accent)
+
+* secondary-main: `#F1DAFB`
+* secondary-light: `#FAEDFF`
+* secondary-dark: `#D8B9E6`
+
+---
+
+## Info
+
+* info-main: `#0284C7`
+* info-light: `#7DD3FC`
+* info-dark: `#0369A1`
+
+---
+
+## Success
+
+* success-main: `#16A34A`
+* success-light: `#86EFAC`
+* success-dark: `#166534`
+
+---
+
+## Warning
+
+* warning-main: `#F59E0B`
+* warning-light: `#FCD34D`
+* warning-dark: `#B45309`
+
+---
+
+## Error
+
+* error-main: `#DC2626`
+* error-light: `#FCA5A5`
+* error-dark: `#991B1B`
+
+---
+
+# 🧠 Usage Rules (STRICT)
+
+## ✅ Always
+
+* Use semantic tokens only
+* Use `*-main` for primary actions
+* Use `*-light` for soft backgrounds
+* Use `*-dark` for hover/active states
+* Reference via CSS variables
+* Follow Angular Material theme system
+
+## ❌ Never
+
+* Hardcode hex values
+* Use rgb(), hsl(), or named colors
+* Use inline styles
+* Create custom color names
+* Override theme locally
+
+---
+
+# 🎨 CSS Variable Definition Location
+
+All tokens must be defined in:
+
+```
+src/styles/_colors.scss
+```
+
+Example:
+
+```scss
+:root {
+  --color-primary-main: #CAC7FF;
+  --color-primary-light: #E4E2FF;
+  --color-primary-dark: #A5A1E8;
+
+  --color-secondary-main: #F1DAFB;
+  --color-secondary-light: #FAEDFF;
+  --color-secondary-dark: #D8B9E6;
+}
+```
+
+---
+
+# 🧩 Example Usage
+
+```css
+.button--primary {
+  background-color: var(--color-primary-main);
+  color: white;
+}
+
+.button--primary:hover {
+  background-color: var(--color-primary-dark);
+}
+
+.badge--secondary {
+  background-color: var(--color-secondary-light);
+  color: var(--color-primary-main);
+}
+
+.alert--error {
+  background-color: var(--color-error-light);
+  border: 1px solid var(--color-error-main);
+}
+```
+
+---
+
+# 🅰️ Angular Material Usage (MANDATORY)
+
+### Theme Configuration Required
+
+* Configure palette using these values
+* Do NOT hardcode hex inside components
+
+### Buttons
+
+```html
+<button mat-raised-button color="primary">Save</button>
+<button mat-raised-button color="accent">Secondary</button>
+<button mat-raised-button color="warn">Delete</button>
+```
+
+### Alert Mapping
+
+| UI State | Token        |
+| -------- | ------------ |
+| info     | info-main    |
+| success  | success-main |
+| warning  | warning-main |
+| error    | error-main   |
+
+---
+
+# 🔒 Enforcement Checklist
+
+Before generating CSS:
+
+* [ ] No hardcoded hex
+* [ ] No Tailwind random colors
+* [ ] No inline styles
+* [ ] Only approved tokens used
+* [ ] Supports dark mode
+* [ ] Angular Material compliant
+

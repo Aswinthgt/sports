@@ -1,0 +1,55 @@
+Node.js version v25.2.1 detected.
+Odd numbered Node.js versions will not enter LTS status and should not be used for production. For more information, please see https://nodejs.org/en/about/previous-releases/.
+[33mΓ¥»[39m Building...
+[32mΓ£ö[39m Building...
+[35mPrerendered 0 static routes.[39m
+Application bundle generation failed. [5.395 seconds] - 2026-02-21T04:23:26.765Z
+
+Γû▓ [WARNING] Deprecation [plugin angular-sass]
+
+    src/styles.scss:2:8:
+      2 Γöé @import "tailwindcss";
+        Γò╡         ^
+
+
+  Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+  
+  More info and automated migrator: https://sass-lang.com/d/import
+
+  The plugin "angular-sass" was triggered by this import
+
+    angular:styles/global:styles:1:8:
+      1 Γöé @import 'src/styles.scss';
+        Γò╡         ~~~~~~~~~~~~~~~~~
+
+
+Γû▓ [WARNING] Deprecation [plugin angular-sass]
+
+    src/styles.scss:3:8:
+      3 Γöé @import "./_colors.scss";
+        Γò╡         ^
+
+
+  Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+  
+  More info and automated migrator: https://sass-lang.com/d/import
+
+  The plugin "angular-sass" was triggered by this import
+
+    angular:styles/global:styles:1:8:
+      1 Γöé @import 'src/styles.scss';
+        Γò╡         ~~~~~~~~~~~~~~~~~
+
+
+Γ£ÿ [ERROR] Can't find stylesheet to import.
+  Γò╖
+3 Γöé @import "./_colors.scss";
+  Γöé         ^^^^^^^^^^^^^^^^
+  Γò╡
+  src\styles.scss 3:9  root stylesheet [plugin angular-sass]
+
+    angular:styles/global:styles:1:8:
+      1 Γöé @import 'src/styles.scss';
+        Γò╡         ~~~~~~~~~~~~~~~~~
+
+

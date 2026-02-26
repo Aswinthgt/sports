@@ -1,3 +1,224 @@
-/* You can add global styles to this file, and also import other style files */
-
 @import "tailwindcss";
+@source "./app";
+
+@theme {
+    --color-app-background: var(--color-app-background);
+    --color-surface-card: var(--color-surface-card);
+    --color-surface-hover: var(--color-surface-hover);
+    --color-border-light: var(--color-border-light);
+
+    --color-primary-main: var(--color-primary-main);
+    --color-primary-light: var(--color-primary-light);
+    --color-primary-dark: var(--color-primary-dark);
+
+    --color-secondary-main: var(--color-secondary-main);
+    --color-secondary-light: var(--color-secondary-light);
+    --color-secondary-dark: var(--color-secondary-dark);
+
+    --color-text-primary: var(--color-text-primary);
+    --color-text-secondary: var(--color-text-secondary);
+    --color-text-muted: var(--color-text-muted);
+    --color-text-on-primary: var(--color-text-on-primary);
+
+    --color-info-main: var(--color-info-main);
+    --color-info-light: var(--color-info-light);
+    --color-info-dark: var(--color-info-dark);
+
+    --color-success-main: var(--color-success-main);
+    --color-success-light: var(--color-success-light);
+    --color-success-dark: var(--color-success-dark);
+
+    --color-warning-main: var(--color-warning-main);
+    --color-warning-light: var(--color-warning-light);
+    --color-warning-dark: var(--color-warning-dark);
+
+    --color-error-main: var(--color-error-main);
+    --color-error-light: var(--color-error-light);
+    --color-error-dark: var(--color-error-dark);
+}
+
+:root {
+    --mdc-filled-button-container-color: var(--color-primary-main);
+    --mdc-filled-button-hover-container-color: var(--color-primary-dark);
+    --mdc-elevated-button-container-color: var(--color-secondary-main);
+    --mdc-elevated-button-label-text-color: var(--color-primary-main);
+    --mdc-outlined-button-label-text-color: var(--color-primary-main);
+    --mdc-outlined-button-outline-color: var(--color-primary-main);
+    --mdc-text-button-label-text-color: var(--color-primary-main);
+    --mdc-fab-container-color: var(--color-primary-main);
+    --mdc-fab-icon-color: white;
+
+    --elevation-0: none;
+    --elevation-1: 0 1px 2px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.06);
+    --elevation-2: 0 4px 6px rgba(0, 0, 0, 0.04), 0 10px 24px rgba(0, 0, 0, 0.08);
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    background-color: var(--color-app-background);
+    color: var(--color-text-secondary);
+}
+
+.text-primary {
+    color: var(--color-text-primary);
+}
+
+.text-secondary {
+    color: var(--color-text-secondary);
+}
+
+.bg-primary {
+    background-color: var(--color-primary-main);
+    color: white;
+}
+
+.bg-secondary {
+    background-color: var(--color-secondary-main);
+    color: var(--color-primary-dark);
+}
+
+.alert-error {
+    background-color: var(--color-error-light);
+    border-left: 4px solid var(--color-error-main);
+}
+
+.surface-panel {
+    background-color: var(--color-surface-card);
+    border-radius: 4px;
+    /* Microsoft Sharp edge */
+    border: 1px solid var(--color-border-light);
+    padding: 24px;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.surface-panel:hover {
+    border-color: var(--color-primary-main);
+    background-color: color-mix(in srgb, var(--color-surface-hover) 50%, transparent);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--color-primary-main), var(--color-secondary-main));
+    color: var(--color-text-on-primary);
+    font-weight: 700;
+    border-radius: 4px;
+    /* Microsoft Sharp edge */
+    padding: 0.75rem 1.75rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 14px 0 rgba(108, 99, 255, 0.35);
+}
+
+.btn-primary:hover:not(:disabled) {
+    box-shadow: 0 6px 20px rgba(108, 99, 255, 0.5);
+    opacity: 0.95;
+    transform: translateY(-2px);
+}
+
+.btn-primary:active:not(:disabled) {
+    transform: scale(0.96);
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, var(--color-surface-card), var(--color-surface-hover));
+    color: var(--color-primary-dark);
+    font-weight: 700;
+    border-radius: 4px;
+    /* Microsoft Sharp edge */
+    padding: 0.75rem 1.75rem;
+    border: 1px solid var(--color-border-light);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background: linear-gradient(135deg, var(--color-surface-hover), var(--color-primary-light));
+    border-color: var(--color-primary-light);
+    color: var(--color-primary-main);
+    box-shadow: 0 4px 12px rgba(108, 99, 255, 0.15);
+    transform: translateY(-2px);
+}
+
+.btn-secondary:active:not(:disabled) {
+    transform: scale(0.96);
+}
+
+.btn-primary:disabled,
+.btn-secondary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.glass-nav {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: var(--color-app-background);
+    border-bottom: 1px solid transparent;
+    transition: padding 0.3s ease, border-color 0.3s ease;
+}
+
+.glass-nav.is-scrolled {
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.elevation-0 {
+    box-shadow: var(--elevation-0);
+}
+
+.elevation-1 {
+    box-shadow: var(--elevation-1);
+}
+
+.elevation-2 {
+    box-shadow: var(--elevation-2);
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+.animate-float {
+    animation: float 3s ease-in-out infinite;
+}
+
+.pill-badge {
+    border-radius: 9999px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.animate-fade-in {
+    animation: fade-in 300ms ease-in-out forwards;
+}

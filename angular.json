@@ -2,7 +2,8 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "cli": {
-    "packageManager": "npm"
+    "packageManager": "npm",
+    "analytics": "41d8cd16-4e6e-4580-b9a2-c7951ac87385"
   },
   "newProjectRoot": "projects",
   "projects": {
@@ -25,6 +26,8 @@
               }
             ],
             "styles": [
+              "@angular/material/prebuilt-themes/azure-blue.css",
+              "src/styles/_colors.scss",
               "src/styles.css"
             ],
             "server": "src/main.server.ts",

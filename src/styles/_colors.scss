@@ -1,0 +1,75 @@
+:root {
+  /* 🌙 DEFAULT: DARK MODE BACKGROUNDS & TEXT */
+  --color-app-background: #0B0F19;
+  --color-surface-card: #151A2A;
+  --color-surface-hover: #1E2538;
+  --color-border-light: #2A344A;
+
+  --color-text-primary: #F8F9FF;
+  --color-text-secondary: #9CA3AF;
+  --color-text-muted: #6B7280;
+  --color-text-on-primary: #000000;
+
+  --bg-image: none;
+
+  --color-navbar-bg: rgba(11, 15, 25, 0.95);
+  --color-navbar-border: var(--color-border-light);
+  --color-navbar-text: var(--color-text-secondary);
+  --color-navbar-text-hover: var(--color-text-primary);
+  --color-navbar-active: var(--color-primary-main);
+  --color-navbar-indicator: color-mix(in srgb, var(--color-primary-light) 15%, transparent);
+
+  /* 🎨 STRICT MANDATORY BRAND TOKENS */
+  /* Primary (Brand) */
+  --color-primary-main: #CAC7FF;
+  --color-primary-light: #E4E2FF;
+  --color-primary-dark: #A5A1E8;
+
+  /* Secondary (Accent) */
+  --color-secondary-main: #F1DAFB;
+  --color-secondary-light: #FAEDFF;
+  --color-secondary-dark: #D8B9E6;
+
+  /* Info */
+  --color-info-main: #0284C7;
+  --color-info-light: #7DD3FC;
+  --color-info-dark: #0369A1;
+
+  /* Success */
+  --color-success-main: #16A34A;
+  --color-success-light: #86EFAC;
+  --color-success-dark: #166534;
+
+  /* Warning */
+  --color-warning-main: #F59E0B;
+  --color-warning-light: #FCD34D;
+  --color-warning-dark: #B45309;
+
+  /* Error */
+  --color-error-main: #DC2626;
+  --color-error-light: #FCA5A5;
+  --color-error-dark: #991B1B;
+}
+
+:root.light {
+  /* ☀️ LIGHT MODE BACKGROUNDS & TEXT */
+  --color-app-background: #F1F3FA;
+  --color-surface-card: #FFFFFF;
+  --color-surface-hover: #F1F2FF;
+  --color-border-light: #E6E8FF;
+
+  --color-text-primary: #1E1E2F;
+  --color-text-secondary: #6B7280;
+  --color-text-muted: #9CA3AF;
+  --color-text-on-primary: #1E1E2F;
+
+  --bg-image: url('/assets/images/cricket-bg-light.png');
+
+  /* Modern Purple to Pink Sidebar */
+  --color-navbar-bg: linear-gradient(180deg, var(--color-primary-dark) 0%, var(--color-secondary-dark) 100%);
+  --color-navbar-border: var(--color-primary-dark);
+  --color-navbar-text: rgba(255, 255, 255, 0.75);
+  --color-navbar-text-hover: #FFFFFF;
+  --color-navbar-active: #FFFFFF;
+  --color-navbar-indicator: rgba(255, 255, 255, 0.15);
+}
