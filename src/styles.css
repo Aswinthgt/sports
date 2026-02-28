@@ -222,3 +222,33 @@ body {
 .animate-fade-in {
     animation: fade-in 300ms ease-in-out forwards;
 }
+
+/* Angular Material Dark Mode Form Overrides */
+html.dark {
+    .mat-mdc-form-field {
+        --mdc-filled-text-field-input-text-color: var(--color-text-primary);
+        --mdc-outlined-text-field-input-text-color: var(--color-text-primary);
+        --mdc-outlined-text-field-label-text-color: var(--color-text-muted);
+        --mdc-outlined-text-field-hover-label-text-color: var(--color-text-secondary);
+        --mdc-outlined-text-field-outline-color: var(--color-border-light);
+        --mdc-outlined-text-field-hover-outline-color: var(--color-primary-main);
+
+        /* Select overrides */
+        --mat-select-enabled-arrow-color: var(--color-text-muted);
+        --mat-select-enabled-trigger-text-color: var(--color-text-primary);
+    }
+
+    /* Brute Force overrides for inputs nested in Material Components */
+    .mat-mdc-input-element,
+    textarea.mat-mdc-input-element {
+        color: var(--color-text-primary) !important;
+    }
+
+    .mat-mdc-floating-label {
+        color: var(--color-text-muted) !important;
+    }
+
+    .mat-mdc-select-value-text {
+        color: var(--color-text-primary) !important;
+    }
+}

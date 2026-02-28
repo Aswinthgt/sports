@@ -27,48 +27,48 @@ import { ThemeService } from '../../../core/services/theme.service';
       <!-- Navigation Links -->
       <div class="flex h-full md:flex-1 items-center justify-evenly md:flex-col md:justify-start md:gap-2 px-2 md:px-0 relative" (mouseleave)="resetIndicator()">
         
-        <!-- Sliding Background Indicator -->
-        <div #indicator class="absolute z-0 rounded-sm transition-all duration-300 ease-out pointer-events-none opacity-0"
+        <!-- Sliding Background Indicator (Desktop Only) -->
+        <div #indicator class="hidden md:block absolute z-0 rounded-sm transition-all duration-300 ease-out pointer-events-none opacity-0"
              style="left: 0; top: 0; transform: translate(0,0); width: 0; height: 0; background-color: var(--color-navbar-indicator);"></div>
         
         <a #navItem routerLink="/dashboard" routerLinkActive="active-nav" [routerLinkActiveOptions]="{exact: true}"
            (mouseenter)="moveIndicator($any($event).currentTarget)"
-           class="nav-item relative z-10 flex flex-col md:flex-row items-center md:justify-start gap-1 md:gap-3 p-1 md:px-3 md:py-3 rounded-sm transition-colors flex-1 md:flex-none md:w-full"
+           class="nav-item relative z-10 flex flex-col items-center justify-center md:flex-row md:justify-start gap-1 md:gap-3 p-1 md:px-3 md:py-3 rounded-sm transition-colors flex-1 md:flex-none md:w-full h-full md:h-auto"
            style="color: var(--color-navbar-text);">
-          <mat-icon class="scale-[0.9] md:scale-100 mb-0.5 md:mb-0 transition-transform">dashboard</mat-icon>
+          <mat-icon class="transition-transform">dashboard</mat-icon>
           <span class="text-[10px] md:text-xs font-bold tracking-wide">Overview</span>
         </a>
 
         <a #navItem routerLink="/players" routerLinkActive="active-nav"
            (mouseenter)="moveIndicator($any($event).currentTarget)"
-           class="nav-item relative z-10 flex flex-col md:flex-row items-center md:justify-start gap-1 md:gap-3 p-1 md:px-3 md:py-3 rounded-sm transition-colors flex-1 md:flex-none md:w-full"
+           class="nav-item relative z-10 flex flex-col items-center justify-center md:flex-row md:justify-start gap-1 md:gap-3 p-1 md:px-3 md:py-3 rounded-sm transition-colors flex-1 md:flex-none md:w-full h-full md:h-auto"
            style="color: var(--color-navbar-text);">
-          <mat-icon class="scale-[0.9] md:scale-100 mb-0.5 md:mb-0 transition-transform">people</mat-icon>
+          <mat-icon class="transition-transform">people</mat-icon>
           <span class="text-[10px] md:text-xs font-bold tracking-wide">Roster</span>
         </a>
 
         <a #navItem routerLink="/split" routerLinkActive="active-nav"
            (mouseenter)="moveIndicator($any($event).currentTarget)"
-           class="nav-item relative z-10 flex flex-col md:flex-row items-center md:justify-start gap-1 md:gap-3 p-1 md:px-3 md:py-3 rounded-sm transition-colors flex-1 md:flex-none md:w-full"
+           class="nav-item relative z-10 flex flex-col items-center justify-center md:flex-row md:justify-start gap-1 md:gap-3 p-1 md:px-3 md:py-3 rounded-sm transition-colors flex-1 md:flex-none md:w-full h-full md:h-auto"
            style="color: var(--color-navbar-text);">
-          <mat-icon class="scale-[0.9] md:scale-100 mb-0.5 md:mb-0 transition-transform">bolt</mat-icon>
+          <mat-icon class="transition-transform">bolt</mat-icon>
           <span class="text-[10px] md:text-xs font-bold tracking-wide">Match</span>
         </a>
 
         <a #navItem routerLink="/history" routerLinkActive="active-nav"
            (mouseenter)="moveIndicator($any($event).currentTarget)"
-           class="nav-item relative z-10 flex flex-col md:flex-row items-center md:justify-start gap-1 md:gap-3 p-1 md:px-3 md:py-3 rounded-sm transition-colors flex-1 md:flex-none md:w-full md:mt-2"
+           class="nav-item relative z-10 flex flex-col items-center justify-center md:flex-row md:justify-start gap-1 md:gap-3 p-1 md:px-3 md:py-3 rounded-sm transition-colors flex-1 md:flex-none md:w-full md:mt-2 h-full md:h-auto"
            style="color: var(--color-navbar-text);">
-          <mat-icon class="scale-[0.9] md:scale-100 mb-0.5 md:mb-0 transition-transform">history</mat-icon>
+          <mat-icon class="transition-transform">history</mat-icon>
           <span class="text-[10px] md:text-xs font-bold tracking-wide">History</span>
         </a>
 
         <!-- Theme Toggle -->
         <button (click)="themeService.toggleTheme()" 
-                class="relative z-10 flex flex-col md:flex-row items-center md:justify-start gap-1 md:gap-3 p-1 md:px-3 md:py-3 rounded-sm transition-colors flex-1 md:flex-none md:w-full md:mt-auto cursor-pointer border-none bg-transparent outline-none"
+                class="relative z-10 flex flex-col items-center justify-center md:flex-row md:justify-start gap-1 md:gap-3 p-1 md:px-3 md:py-3 rounded-sm transition-colors flex-1 md:flex-none md:w-full md:mt-auto cursor-pointer border-none bg-transparent outline-none h-full md:h-auto"
                 style="color: var(--color-navbar-text);">
-          <mat-icon class="scale-[0.9] md:scale-100 mb-0.5 md:mb-0 transition-transform">{{ themeService.isDarkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
-          <span class="text-[10px] md:text-xs font-bold tracking-wide">{{ themeService.isDarkMode() ? 'Light' : 'Dark' }}</span>
+          <mat-icon class="transition-transform">{{ themeService.isDarkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+          <span class="text-[10px] md:text-xs font-bold tracking-wide text-center leading-tight">{{ themeService.isDarkMode() ? 'Light' : 'Dark' }}</span>
         </button>
 
       </div>

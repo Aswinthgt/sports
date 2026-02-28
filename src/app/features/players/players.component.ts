@@ -2,9 +2,6 @@ import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
@@ -23,9 +20,6 @@ import * as XLSX from 'xlsx';
     CommonModule,
     ReactiveFormsModule,
     MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
     MatButtonModule,
     MatIconModule,
     MatTableModule,
@@ -42,24 +36,24 @@ import * as XLSX from 'xlsx';
           <p class="text-secondary text-base">Manage your roster database effortlessly.</p>
         </div>
         
-        <div class="flex flex-wrap items-center gap-3">
+        <div class="flex flex-wrap items-center gap-2">
           <!-- Hidden Excel Input -->
           <input #fileInput type="file" accept=".xlsx, .xls" class="hidden" (change)="onFileChange($event)" />
           
-          <button class="btn-secondary py-2 px-3 shadow-sm text-sm" (click)="downloadTemplate()">
-            <mat-icon class="scale-75 mr-1 text-info-main">download</mat-icon> Template
+          <button class="btn-secondary !py-1.5 !px-3 shadow-sm !text-sm" (click)="downloadTemplate()">
+            <mat-icon class="!scale-[0.85] mr-1 text-info-main">download</mat-icon> Template
           </button>
           
-          <button class="btn-secondary py-2 px-3 shadow-sm text-sm" (click)="fileInput.click()">
-            <mat-icon class="scale-75 mr-1 text-success-main">upload_file</mat-icon> Import Excel
+          <button class="btn-secondary !py-1.5 !px-3 shadow-sm !text-sm" (click)="fileInput.click()">
+            <mat-icon class="!scale-[0.85] mr-1 text-success-main">upload_file</mat-icon> Import Excel
           </button>
           
-          <button class="btn-secondary py-2 px-3 shadow-sm text-sm" (click)="exportPlayers()">
-            <mat-icon class="scale-75 mr-1 text-primary-main">ios_share</mat-icon> Export Data
+          <button class="btn-secondary !py-1.5 !px-3 shadow-sm !text-sm" (click)="exportPlayers()">
+            <mat-icon class="!scale-[0.85] mr-1 text-primary-main">ios_share</mat-icon> Export Data
           </button>
           
-          <button class="btn-primary py-2 px-5 shadow-md flex items-center ml-auto md:ml-2" (click)="toggleForm()">
-            <mat-icon class="scale-100 mr-2">{{ isFormOpen ? 'close' : 'add' }}</mat-icon>
+          <button class="btn-primary !py-1.5 !px-4 shadow-md flex items-center ml-auto md:ml-2 !text-sm" (click)="toggleForm()">
+            <mat-icon class="!scale-[0.9] mr-1">{{ isFormOpen ? 'close' : 'add' }}</mat-icon>
             {{ isFormOpen ? 'Cancel' : 'Add Player' }}
           </button>
         </div>
@@ -82,15 +76,32 @@ import * as XLSX from 'xlsx';
               </button>
             </div>
           </div>
-          <div *ngIf="filteredPlayers().length === 0" class="text-center py-20 border-2 border-dashed border-border-light rounded-sm mx-auto w-full">
+          <div *ngIf="playerService.players().length === 0" class="flex flex-col items-center justify-center p-12 mt-4 bg-surface-hover/30 border border-dashed border-border-light rounded-sm w-full">
              <mat-icon class="text-6xl text-muted opacity-50 mb-4">person_search</mat-icon>
-             <h3 class="text-2xl font-bold text-primary mb-2">No Players Found</h3>
-             <p class="text-secondary mb-6">{{ searchQuery() ? 'No players match your search criteria.' : 'Your master roster is empty. Add a player or import an Excel template.' }}</p>
-             <button *ngIf="!searchQuery()" class="btn-primary py-3" (click)="toggleForm()">Create First Player</button>
-             <button *ngIf="searchQuery()" class="btn-secondary py-3" (click)="searchQuery.set('')">Clear Search</button>
+             <h3 class="text-2xl font-bold text-primary mb-2">Master Roster Empty</h3>
+             <p class="text-secondary mb-10 text-center">Begin by importing an Excel template or manually creating players below.</p>
+             
+             <!-- ADD PLAYER CARD (Empty State Explicit Render) --->
+             <div (click)="toggleForm()" 
+                  class="h-[210px] w-full max-w-[320px] flex flex-col items-center justify-center bg-surface-hover/20 border-2 border-dashed border-border-light hover:border-primary-main/50 hover:bg-surface-hover/40 transition-all cursor-pointer rounded-sm group relative p-5 mx-auto">
+                 
+                 <div class="w-14 h-14 rounded-full bg-surface-hover flex items-center justify-center mb-4 group-hover:scale-110 group-hover:text-primary-main transition-all shadow-sm border border-border-light group-hover:border-primary-main/30">
+                    <mat-icon class="text-muted group-hover:text-primary-main scale-125 transition-colors">add</mat-icon>
+                 </div>
+                 
+                 <h3 class="text-muted group-hover:text-primary-main font-black tracking-widest uppercase text-xs transition-colors">
+                   Add Player
+                 </h3>
+             </div>
+          </div>
+          
+          <div *ngIf="searchQuery() && filteredPlayers().length === 0" class="flex flex-col items-center justify-center p-12 mt-4 w-full">
+             <h3 class="text-2xl font-bold text-primary mb-2">No Search Results</h3>
+             <button class="btn-secondary py-2.5 px-6 text-sm mt-4" (click)="searchQuery.set('')">Clear Search</button>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 w-full" *ngIf="filteredPlayers().length > 0">
+          <!-- Normal Grid for Populated Roster -->
+          <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 w-full mt-4" *ngIf="!searchQuery() && playerService.players().length > 0 || filteredPlayers().length > 0">
             
             <div *ngFor="let p of filteredPlayers()" 
                  class="bg-surface-card rounded-sm border border-border-light p-5 hover:shadow-md hover:border-primary-main/30 transition-all group flex flex-col relative h-[210px] justify-between">
@@ -115,12 +126,12 @@ import * as XLSX from 'xlsx';
                 </div>
                 
                 <!-- Card Actions -->
-                <div class="opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 flex flex-row items-center gap-2 absolute top-4 right-4">
-                  <button (click)="editPlayer(p)" title="Edit Player" class="w-8 h-8 rounded-sm flex items-center justify-center bg-gradient-to-br from-primary-main to-secondary-main text-white shadow-md hover:shadow-lg transition-transform hover:scale-110 border-none cursor-pointer">
-                    <mat-icon class="scale-[0.8]">edit</mat-icon>
+                <div class="sm:opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 flex flex-row items-center gap-2 absolute top-4 right-4">
+                  <button (click)="editPlayer(p)" title="Edit Player" class="w-7 h-7 rounded-sm flex items-center justify-center bg-gradient-to-br from-primary-main to-secondary-main text-white shadow-sm hover:shadow-md transition-transform hover:scale-110 border-none cursor-pointer">
+                    <mat-icon class="scale-[0.7]">edit</mat-icon>
                   </button>
-                  <button (click)="deletePlayer(p.id)" title="Delete Player" class="w-8 h-8 rounded-sm flex items-center justify-center bg-gradient-to-br from-error-light to-error-main text-white shadow-md hover:shadow-lg transition-transform hover:scale-110 border-none cursor-pointer">
-                    <mat-icon class="scale-[0.8]">delete</mat-icon>
+                  <button (click)="deletePlayer(p.id)" title="Delete Player" class="w-7 h-7 rounded-sm flex items-center justify-center bg-gradient-to-br from-error-light to-error-main text-white shadow-sm hover:shadow-md transition-transform hover:scale-110 border-none cursor-pointer">
+                    <mat-icon class="scale-[0.7]">delete</mat-icon>
                   </button>
                 </div>
               </div>
@@ -166,6 +177,20 @@ import * as XLSX from 'xlsx';
 
             </div>
             
+            <!-- ADD PLAYER CARD (Normal Render at end of Grid) --->
+            <div *ngIf="!searchQuery() && playerService.players().length > 0"
+                 (click)="toggleForm()" 
+                 class="h-[210px] flex flex-col items-center justify-center bg-surface-hover/20 border-2 border-dashed border-border-light hover:border-primary-main/50 hover:bg-surface-hover/40 transition-all cursor-pointer rounded-sm group relative p-5">
+                
+                <div class="w-14 h-14 rounded-full bg-surface-hover flex items-center justify-center mb-4 group-hover:scale-110 group-hover:text-primary-main transition-all shadow-sm border border-border-light group-hover:border-primary-main/30">
+                   <mat-icon class="text-muted group-hover:text-primary-main scale-125 transition-colors">add</mat-icon>
+                </div>
+                
+                <h3 class="text-muted group-hover:text-primary-main font-black tracking-widest uppercase text-xs transition-colors">
+                  Add Player
+                </h3>
+            </div>
+            
           </div>
         </div>
       </div>
@@ -186,37 +211,58 @@ import * as XLSX from 'xlsx';
             <mat-icon class="text-primary-main scale-90">{{ editingId ? 'edit' : 'person_add' }}</mat-icon>
             {{ editingId ? 'Update Profile' : 'New Player' }}
           </h2>
-          <button (click)="toggleForm()" class="w-8 h-8 flex items-center justify-center rounded-sm hover:bg-border-light/50 transition-colors text-muted hover:text-error-main cursor-pointer border-none bg-transparent">
-            <mat-icon class="scale-90">close</mat-icon>
+          <button (click)="toggleForm()" class="w-6 h-6 flex items-center justify-center rounded-sm hover:bg-border-light/50 transition-colors text-muted hover:text-error-main cursor-pointer border-none bg-transparent">
+            <mat-icon class="scale-75">close</mat-icon>
           </button>
         </div>
 
         <div class="flex-grow overflow-y-auto w-full p-6">
-          <form [formGroup]="playerForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
-            <mat-form-field appearance="outline" class="w-full">
-              <mat-label>Player Name</mat-label>
-              <input matInput formControlName="name" placeholder="E.g. Virat Kohli" />
-              <mat-error *ngIf="playerForm.get('name')?.hasError('required')">Required</mat-error>
-              <mat-error *ngIf="playerForm.get('name')?.hasError('duplicate')">Must be unique</mat-error>
-            </mat-form-field>
+          <form [formGroup]="playerForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-5">
+            
+            <div class="flex flex-col gap-1.5 w-full">
+              <label class="text-xs font-bold text-muted uppercase tracking-widest">Player Name</label>
+              <input type="text" formControlName="name" placeholder="E.g. Virat Kohli" 
+                     class="w-full bg-surface-card hover:bg-surface-hover border border-border-light rounded-sm py-2.5 px-3 text-sm text-primary font-medium focus:outline-none focus:border-primary-main focus:ring-2 focus:ring-primary-main/20 transition-all shadow-sm" />
+              <div class="text-error-main text-[10px] font-bold mt-0.5" *ngIf="playerForm.get('name')?.hasError('required') && playerForm.get('name')?.touched">Player Name is required</div>
+              <div class="text-error-main text-[10px] font-bold mt-0.5" *ngIf="playerForm.get('name')?.hasError('duplicate')">A player with this name already exists</div>
+            </div>
 
             <div class="flex gap-4">
-              <mat-form-field appearance="outline" class="w-1/2">
-                <mat-label>Shirt #</mat-label>
-                <input matInput type="number" formControlName="playerNumber" placeholder="Auto" />
-                <mat-error *ngIf="playerForm.get('playerNumber')?.hasError('duplicate')">Exists</mat-error>
-              </mat-form-field>
+              <div class="flex flex-col gap-1.5 w-1/2">
+                <label class="text-xs font-bold text-muted uppercase tracking-widest">Shirt #</label>
+                <input type="number" formControlName="playerNumber" placeholder="Auto" 
+                       class="w-full bg-surface-card hover:bg-surface-hover border border-border-light rounded-sm py-2.5 px-3 text-sm text-primary font-medium focus:outline-none focus:border-primary-main focus:ring-2 focus:ring-primary-main/20 transition-all shadow-sm" />
+                <div class="text-error-main text-[10px] font-bold mt-0.5" *ngIf="playerForm.get('playerNumber')?.hasError('duplicate')">Shirt number already taken</div>
+              </div>
 
-              <mat-form-field appearance="outline" class="w-1/2">
-                <mat-label>Role</mat-label>
-                <mat-select formControlName="role">
-                  <mat-option value="Batsman">Batsman</mat-option>
-                  <mat-option value="Bowler">Bowler</mat-option>
-                  <mat-option value="Allrounder">Allrounder</mat-option>
-                  <mat-option value="Wicketkeeper">Wicketkeeper</mat-option>
-                  <mat-option value="Custom">Custom</mat-option>
-                </mat-select>
-              </mat-form-field>
+              <div class="flex flex-col gap-1.5 w-1/2">
+                <label class="text-xs font-bold text-muted uppercase tracking-widest">Role</label>
+                <div class="relative w-full">
+                  
+                  <!-- Backdrop to close dropdown -->
+                  <div *ngIf="isRoleDropdownOpen()" class="fixed inset-0 z-40" (click)="isRoleDropdownOpen.set(false)"></div>
+
+                  <!-- Custom Dropdown Trigger -->
+                  <div (click)="isRoleDropdownOpen.set(!isRoleDropdownOpen())" 
+                       class="w-full bg-surface-card hover:bg-surface-hover border border-border-light rounded-sm py-2.5 pl-3 pr-8 text-sm text-primary font-medium focus:outline-none focus:border-primary-main focus:ring-2 focus:ring-primary-main/20 transition-all shadow-sm cursor-pointer flex items-center justify-between relative z-50">
+                    <span class="truncate">{{ playerForm.get('role')?.value || 'Select Role' }}</span>
+                  </div>
+                  <mat-icon class="absolute right-2 top-1/2 -translate-y-1/2 text-muted scale-[0.6] pointer-events-none transition-transform z-50" [class.rotate-180]="isRoleDropdownOpen()">expand_more</mat-icon>
+
+                  <!-- Custom Dropdown Menu -->
+                  <div *ngIf="isRoleDropdownOpen()" 
+                       class="absolute top-[calc(100%+4px)] left-0 w-full bg-surface-card border border-border-light rounded-sm shadow-xl z-50 overflow-hidden flex flex-col animate-fade-in">
+                    <div *ngFor="let role of roles" 
+                         (click)="selectRole(role)" 
+                         class="py-2 px-3 text-sm text-primary hover:bg-primary-main/10 cursor-pointer transition-colors border-b border-border-light last:border-0" 
+                         [class.bg-primary-main]="playerForm.get('role')?.value === role" 
+                         [class.text-white]="playerForm.get('role')?.value === role">
+                      {{ role }}
+                    </div>
+                  </div>
+
+                </div>
+              </div>
             </div>
 
             <!-- Native Skill Sliders -->
@@ -255,7 +301,7 @@ import * as XLSX from 'xlsx';
               </div>
             </div>
 
-            <button type="submit" class="btn-primary w-full py-3 mt-4 shadow-md text-base rounded-sm" [disabled]="playerForm.invalid">
+            <button type="submit" class="btn-primary w-full py-2.5 mt-4 shadow-sm text-sm rounded-sm" [disabled]="playerForm.invalid">
               {{ editingId ? 'Save Edits' : 'Save To Roster' }}
             </button>
           </form>
@@ -271,6 +317,9 @@ export class PlayersComponent implements OnInit {
   editingId: string | null = null;
   isFormOpen = false;
   displayedColumns: string[] = ['playerNumber', 'name', 'role', 'stats', 'actions'];
+
+  isRoleDropdownOpen = signal<boolean>(false);
+  roles = ['Batsman', 'Bowler', 'Allrounder', 'Wicketkeeper', 'Custom'];
 
   searchQuery = signal('');
 
@@ -434,6 +483,11 @@ export class PlayersComponent implements OnInit {
       fieldingSkill: 50,
       wicketkeepingSkill: 50,
     });
+  }
+
+  selectRole(role: string) {
+    this.playerForm.get('role')?.setValue(role);
+    this.isRoleDropdownOpen.set(false);
   }
 
   async toggleForm() {

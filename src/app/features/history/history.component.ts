@@ -21,11 +21,11 @@ import { firstValueFrom } from 'rxjs';
           <p class="text-secondary text-base">Record of previously generated balanced teams.</p>
         </div>
         <button
-          class="btn-secondary border-error-main/20 text-error-dark hover:border-error-main font-semibold px-6 py-3 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed bg-transparent"
+          class="btn-secondary border-error-main/20 text-error-dark hover:border-error-main font-semibold !py-1.5 !px-4 shadow-sm !text-sm flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed bg-transparent"
           (click)="clearHistory()"
           [disabled]="historyService.totalMatches() === 0"
         >
-          <mat-icon class="scale-90">delete_sweep</mat-icon> Clear All
+          <mat-icon class="!scale-90">delete_sweep</mat-icon> Clear All
         </button>
       </div>
 

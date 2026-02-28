@@ -12,6 +12,7 @@ import {
   moveItemInArray,
   transferArrayItem,
 } from '@angular/cdk/drag-drop';
+import { trigger, transition, style, animate, keyframes } from '@angular/animations';
 import { PlayerService } from '../../core/services/player.service';
 import { TeamService } from '../../core/services/team.service';
 import { HistoryService } from '../../core/services/history.service';
@@ -30,6 +31,18 @@ import { MatchDB } from '../../shared/models/match.model';
     MatSnackBarModule,
     DragDropModule,
   ],
+  animations: [
+    trigger('swapPulse', [
+      transition('* => swapped', [
+        animate('0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)', keyframes([
+          style({ transform: 'scale(1)', offset: 0 }),
+          style({ transform: 'scale(0.95)', offset: 0.3 }),
+          style({ transform: 'scale(1.05)', offset: 0.6 }),
+          style({ transform: 'scale(1)', offset: 1.0 })
+        ]))
+      ])
+    ])
+  ],
   template: `
     <div class="flex flex-col gap-6 w-full pb-20">
       <!-- Header -->
@@ -42,33 +55,33 @@ import { MatchDB } from '../../shared/models/match.model';
         </div>
         <div class="flex flex-wrap gap-4 w-full md:w-auto" *ngIf="!matchSelectionStep()">
           <button
-            class="btn-secondary py-3"
+            class="btn-secondary !py-1.5 !px-4 shadow-sm !text-sm"
             (click)="editSelection()"
           >
-            <mat-icon class="scale-90 mr-2">arrow_back</mat-icon> Edit Selection
+            <mat-icon class="!scale-[0.85] mr-1">arrow_back</mat-icon> Edit Selection
           </button>
           <button
-            class="btn-secondary py-3"
+            class="btn-secondary !py-1.5 !px-4 shadow-sm !text-sm"
             (click)="reshuffleTeams()"
             [disabled]="teamA().length === 0"
           >
-            <mat-icon class="scale-90 mr-2">refresh</mat-icon> Reshuffle
+            <mat-icon class="!scale-[0.85] mr-1">refresh</mat-icon> Reshuffle
           </button>
           <button
-            class="btn-primary py-3"
+            class="btn-primary !py-1.5 !px-4 shadow-sm !text-sm"
             (click)="saveMatch()"
             [disabled]="teamA().length === 0"
           >
-            <mat-icon class="scale-90 mr-2">save</mat-icon> Save Match
+            <mat-icon class="!scale-[0.85] mr-1">save</mat-icon> Save Match
           </button>
         </div>
         <div class="flex w-full md:w-auto" *ngIf="matchSelectionStep()">
            <button
-             class="btn-primary py-2 px-6 shadow-sm text-base flex items-center gap-2"
+             class="btn-primary !py-1.5 !px-5 shadow-sm !text-sm flex items-center gap-1"
              (click)="proceedToSplit()"
              [disabled]="selectedPlayerIds().length < 4"
            >
-             Next Step <mat-icon class="scale-90 ml-1">arrow_forward</mat-icon>
+             Next Step <mat-icon class="!scale-[0.85] ml-1">arrow_forward</mat-icon>
            </button>
         </div>
       </div>
@@ -85,7 +98,7 @@ import { MatchDB } from '../../shared/models/match.model';
           <span class="text-primary font-black">{{ playerService.totalPlayers() }}</span> / Minimum 4
         </p>
         <button
-          class="btn-primary py-3 px-8 shadow-sm text-base"
+          class="btn-primary !py-1.5 !px-5 shadow-sm !text-sm"
           (click)="router.navigate(['/players'])"
         >
           Manage Roster
@@ -112,8 +125,8 @@ import { MatchDB } from '../../shared/models/match.model';
 
             <div class="flex flex-wrap items-center lg:justify-end gap-4 whitespace-nowrap">
                 <span class="text-secondary font-bold">{{ selectedPlayerIds().length }} Selected</span>
-                <button class="btn-secondary py-2 px-3 shadow-sm text-sm" (click)="selectAll()">Select All</button>
-                <button class="btn-secondary py-2 px-3 shadow-sm text-sm" (click)="clearSelection()">Clear All</button>
+                <button class="btn-secondary !py-1.5 !px-4 shadow-sm !text-sm" (click)="selectAll()">Select All</button>
+                <button class="btn-secondary !py-1.5 !px-4 shadow-sm !text-sm" (click)="clearSelection()">Clear All</button>
             </div>
         </div>
         
@@ -186,56 +199,32 @@ import { MatchDB } from '../../shared/models/match.model';
         class="flex justify-center my-20"
       >
         <button
-          class="btn-primary px-12 py-6 text-2xl font-black rounded-sm flex items-center gap-3"
+          class="btn-primary !py-3 !px-6 !text-xl font-black rounded-sm flex items-center gap-3"
           (click)="generateInitialTeams()"
         >
-          <mat-icon class="scale-150">bolt</mat-icon>
+          <mat-icon class="scale-[1.2]">bolt</mat-icon>
           Auto-Generate Balanced Teams
         </button>
       </div>
 
-      <!-- Teams Display -->
-      <div *ngIf="!matchSelectionStep() && teamA().length > 0 && teamB().length > 0" class="flex flex-col lg:flex-row gap-16 lg:gap-24 relative mt-8">
-        <!-- VS Divider (Desktop) -->
-        <div class="hidden lg:flex absolute left-1/2 top-0 bottom-0 -ml-[1px] w-[2px] bg-border-light">
-          <div class="absolute top-32 left-1/2 -ml-6 bg-app-background px-2 py-4 text-border-light font-black text-2xl tracking-widest" style="writing-mode: vertical-rl;">
-            VS
+      <!-- Teams Display (Dual List Reorder UI) -->
+      <div *ngIf="!matchSelectionStep() && teamA().length > 0 && teamB().length > 0" class="grid grid-cols-2 gap-2 sm:gap-6 relative mt-4 sm:mt-8">
+        
+        <!-- TEAM A COLUMN -->
+        <div class="flex-1 flex flex-col min-w-0">
+          <!-- Team Header Pill -->
+          <div class="flex justify-between items-center mb-3 sm:mb-4 px-1">
+            <h2 class="text-[10px] sm:text-xs font-bold text-muted uppercase tracking-widest m-0 flex items-center gap-1.5 sm:gap-2">
+              <span class="w-2 h-2 rounded-full bg-info-main"></span>
+              <span class="truncate">TEAM A</span>
+            </h2>
+            <div class="bg-surface-hover text-primary text-[10px] sm:text-xs font-black px-2 py-0.5 rounded-full">
+              {{ teamA().length }}
+            </div>
           </div>
-        </div>
-
-        <!-- TEAM A -->
-        <div class="flex-1 flex flex-col">
-          <!-- Team Header -->
-          <div class="pb-8 mb-8 border-b border-border-light">
-            <div class="flex justify-between items-start mb-6">
-              <div>
-                <div class="flex items-center gap-3 mb-1">
-                  <div class="bg-info-main w-3 h-3 rounded-sm"></div>
-                  <h2 class="text-3xl font-black text-primary tracking-tight m-0">Team A</h2>
-                </div>
-                <p class="text-[10px] text-info-main font-bold uppercase tracking-widest mt-2">
-                  Avg Skill: {{ metricsA().avgBatting | number: '1.0-1' }}
-                </p>
-              </div>
-              <div class="text-right">
-                <span class="text-5xl font-black text-primary leading-none tracking-tighter">{{
-                  metricsA().totalScore | number: '1.0-0'
-                }}</span>
-                <p class="text-[10px] text-muted font-bold uppercase tracking-widest mt-1">Total Score</p>
-              </div>
-            </div>
-
-            <!-- Captains -->
-            <div class="flex gap-4 text-xs font-bold text-primary mb-6">
-              <div *ngIf="metricsA().captain" class="flex items-center gap-2">
-                <span class="bg-primary hover:bg-primary-dark text-white px-1.5 py-0.5 rounded">C</span>
-                {{ metricsA().captain?.name }}
-              </div>
-              <div *ngIf="metricsA().viceCaptain" class="flex items-center gap-2">
-                <span class="bg-secondary text-primary-dark px-1.5 py-0.5 rounded">VC</span>
-                {{ metricsA().viceCaptain?.name }}
-              </div>
-            </div>
+          <!-- Team Score summary -->
+          <div class="text-[10px] sm:text-xs font-bold text-primary mb-3 sm:mb-4 px-1 truncate flex items-baseline gap-1">
+             <span class="text-sm sm:text-lg font-black">{{metricsA().totalScore | number: '1.0-0'}}</span> PTS
           </div>
 
           <!-- Drag List A -->
@@ -244,78 +233,67 @@ import { MatchDB } from '../../shared/models/match.model';
             #teamAList="cdkDropList"
             [cdkDropListData]="teamA()"
             [cdkDropListConnectedTo]="[teamBList]"
-            class="min-h-[400px] flex flex-col"
+            class="min-h-[400px] flex flex-col gap-2 rounded-lg bg-surface-hover/30 p-2 border border-dashed border-border-light"
+            [class.border-primary-main]="teamA().length === 0"
             (cdkDropListDropped)="drop($event)"
           >
+            <!-- Empty Placeholder -->
+            <div *ngIf="teamA().length === 0" class="h-20 w-full flex flex-col items-center justify-center text-primary-main opacity-60">
+                <mat-icon>add_circle</mat-icon>
+                <span class="text-[10px] font-bold mt-1 uppercase">DROP HERE</span>
+            </div>
+
+            <!-- Player Card -->
             <div
               *ngFor="let p of teamA(); let i = index"
               cdkDrag
               (click)="handlePlayerClick('A', i)"
-              class="py-3 sm:py-4 border-b border-border-light flex justify-between items-center hover:bg-surface-hover/50 transition-colors outline-none px-2 sm:px-4 -mx-2 sm:-mx-4 rounded-sm bg-surface-card cursor-pointer"
+              [@swapPulse]="recentlySwappedIds().includes(p.id) ? 'swapped' : 'default'"
+              class="group relative flex items-center gap-2 p-2 sm:p-3 rounded-md bg-surface-card border border-border-light transition-all cursor-pointer shadow-sm hover:shadow-md hover:border-border"
               [class.ring-2]="selectedForSwap()?.team === 'A' && selectedForSwap()?.index === i"
               [class.ring-primary-main]="selectedForSwap()?.team === 'A' && selectedForSwap()?.index === i"
+              [class.bg-primary-light]="selectedForSwap()?.team === 'A' && selectedForSwap()?.index === i"
+              [class.bg-opacity-20]="selectedForSwap()?.team === 'A' && selectedForSwap()?.index === i"
             >
-              <div class="flex gap-2 sm:gap-4 items-center">
-                <div cdkDragHandle class="cursor-grab active:cursor-grabbing p-2 sm:p-3 -ml-2 sm:-ml-4 mr-1 hover:bg-border-light/50 rounded-full transition-colors flex items-center justify-center touch-none hidden md:flex">
-                  <mat-icon class="text-muted/70 hover:text-primary-main transition-colors">drag_indicator</mat-icon>
+              <!-- Role Icon Box -->
+              <div class="w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0 rounded bg-surface-hover flex items-center justify-center text-primary font-black text-xs sm:text-sm">
+                 {{ p.role | slice:0:1 }}
+              </div>
+              
+              <!-- Player Info -->
+              <div class="flex-1 min-w-0 flex flex-col justify-center">
+                <div class="font-bold text-primary text-xs sm:text-sm truncate">
+                  {{ p.name }}
                 </div>
-                <!-- Player Info -->
-                <div class="flex flex-col justify-center">
-                  <div class="font-bold text-primary text-lg flex items-center gap-2">
-                    <span class="text-muted text-sm tracking-widest leading-none">#{{ p.playerNumber }}</span>
-                    <span>{{ p.name }}</span>
-                  </div>
-                  <div class="text-xs font-bold text-secondary uppercase tracking-widest mt-0.5">{{ p.role }}</div>
+                <!-- Optional: Show overall score on mobile instead of full stats -->
+                <div class="text-[9px] sm:text-[10px] font-bold text-muted uppercase tracking-widest mt-0.5 max-w-full truncate">
+                   {{ p.overallScore | number:'1.0-0' }} OVR
                 </div>
               </div>
-              <div class="flex items-center gap-6 text-right">
-                <div class="hidden sm:flex text-[10px] gap-3 font-bold text-muted uppercase tracking-widest">
-                  <span title="Batting">BT: {{ p.battingSkill | number:'1.0-0' }}</span>
-                  <span title="Bowling">BW: {{ p.bowlingSkill | number:'1.0-0' }}</span>
-                  <span title="Fielding">FD: {{ p.fieldingSkill | number:'1.0-0' }}</span>
-                  <span title="Wicketkeeping">WK: {{ p.wicketkeepingSkill | number:'1.0-0' }}</span>
-                </div>
-                <div class="text-xl font-black text-primary w-12 text-right">
-                  {{ p.overallScore | number: '1.0-0' }}
-                </div>
+
+               <!-- Drag Handle -->
+              <div cdkDragHandle class="cursor-grab active:cursor-grabbing p-1 flex-shrink-0 text-border hover:text-primary transition-colors touch-none hidden sm:flex">
+                <mat-icon class="scale-75 sm:scale-100">drag_indicator</mat-icon>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- TEAM B -->
-        <div class="flex-1 flex flex-col">
-          <!-- Team Header -->
-          <div class="pb-8 mb-8 border-b border-border-light">
-            <div class="flex justify-between items-start mb-6">
-              <div>
-                <div class="flex items-center gap-3 mb-1">
-                  <div class="bg-success-main w-3 h-3 rounded-full"></div>
-                  <h2 class="text-3xl font-black text-primary tracking-tight m-0">Team B</h2>
-                </div>
-                <p class="text-[10px] text-success-main font-bold uppercase tracking-widest mt-2">
-                  Avg Skill: {{ metricsB().avgBatting | number: '1.0-1' }}
-                </p>
-              </div>
-              <div class="text-right">
-                <span class="text-5xl font-black text-primary leading-none tracking-tighter">{{
-                  metricsB().totalScore | number: '1.0-0'
-                }}</span>
-                <p class="text-[10px] text-muted font-bold uppercase tracking-widest mt-1">Total Score</p>
-              </div>
+        <!-- TEAM B COLUMN -->
+        <div class="flex-1 flex flex-col min-w-0">
+          <!-- Team Header Pill -->
+          <div class="flex justify-between items-center mb-3 sm:mb-4 px-1">
+            <h2 class="text-[10px] sm:text-xs font-bold text-muted uppercase tracking-widest m-0 flex items-center gap-1.5 sm:gap-2">
+              <span class="w-2 h-2 rounded-full bg-success-main"></span>
+              <span class="truncate">TEAM B</span>
+            </h2>
+            <div class="bg-surface-hover text-primary text-[10px] sm:text-xs font-black px-2 py-0.5 rounded-full">
+              {{ teamB().length }}
             </div>
-
-            <!-- Captains -->
-            <div class="flex gap-4 text-xs font-bold text-primary mb-6">
-              <div *ngIf="metricsB().captain" class="flex items-center gap-2">
-                <span class="bg-primary hover:bg-primary-dark text-white px-1.5 py-0.5 rounded">C</span>
-                {{ metricsB().captain?.name }}
-              </div>
-              <div *ngIf="metricsB().viceCaptain" class="flex items-center gap-2">
-                <span class="bg-secondary text-primary-dark px-1.5 py-0.5 rounded">VC</span>
-                {{ metricsB().viceCaptain?.name }}
-              </div>
-            </div>
+          </div>
+          <!-- Team Score summary -->
+          <div class="text-[10px] sm:text-xs font-bold text-primary mb-3 sm:mb-4 px-1 truncate flex items-baseline gap-1">
+             <span class="text-sm sm:text-lg font-black">{{metricsB().totalScore | number: '1.0-0'}}</span> PTS
           </div>
 
           <!-- Drag List B -->
@@ -324,40 +302,47 @@ import { MatchDB } from '../../shared/models/match.model';
             #teamBList="cdkDropList"
             [cdkDropListData]="teamB()"
             [cdkDropListConnectedTo]="[teamAList]"
-            class="min-h-[400px] flex flex-col"
+            class="min-h-[400px] flex flex-col gap-2 rounded-lg bg-surface-hover/30 p-2 border border-dashed border-border-light"
+            [class.border-success-main]="teamB().length === 0"
             (cdkDropListDropped)="drop($event)"
           >
+            <!-- Empty Placeholder -->
+            <div *ngIf="teamB().length === 0" class="h-20 w-full flex flex-col items-center justify-center text-success-main opacity-60">
+                <mat-icon>add_circle</mat-icon>
+                <span class="text-[10px] font-bold mt-1 uppercase">DROP HERE</span>
+            </div>
+
+            <!-- Player Card -->
             <div
               *ngFor="let p of teamB(); let i = index"
               cdkDrag
               (click)="handlePlayerClick('B', i)"
-              class="py-3 sm:py-4 border-b border-border-light flex justify-between items-center hover:bg-surface-hover/50 transition-colors outline-none px-2 sm:px-4 -mx-2 sm:-mx-4 rounded-sm bg-surface-card cursor-pointer"
+              [@swapPulse]="recentlySwappedIds().includes(p.id) ? 'swapped' : 'default'"
+              class="group relative flex items-center gap-2 p-2 sm:p-3 rounded-md bg-surface-card border border-border-light transition-all cursor-pointer shadow-sm hover:shadow-md hover:border-border"
               [class.ring-2]="selectedForSwap()?.team === 'B' && selectedForSwap()?.index === i"
               [class.ring-primary-main]="selectedForSwap()?.team === 'B' && selectedForSwap()?.index === i"
+              [class.bg-primary-light]="selectedForSwap()?.team === 'B' && selectedForSwap()?.index === i"
+              [class.bg-opacity-20]="selectedForSwap()?.team === 'B' && selectedForSwap()?.index === i"
             >
-              <div class="flex gap-2 sm:gap-4 items-center">
-                <div cdkDragHandle class="cursor-grab active:cursor-grabbing p-2 sm:p-3 -ml-2 sm:-ml-4 mr-1 hover:bg-border-light/50 rounded-full transition-colors flex items-center justify-center touch-none hidden md:flex">
-                  <mat-icon class="text-muted/70 hover:text-primary-main transition-colors">drag_indicator</mat-icon>
+              <!-- Role Icon Box -->
+              <div class="w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0 rounded bg-surface-hover flex items-center justify-center text-primary font-black text-xs sm:text-sm">
+                 {{ p.role | slice:0:1 }}
+              </div>
+              
+              <!-- Player Info -->
+              <div class="flex-1 min-w-0 flex flex-col justify-center">
+                <div class="font-bold text-primary text-xs sm:text-sm truncate">
+                  {{ p.name }}
                 </div>
-                <!-- Player Info -->
-                <div class="flex flex-col justify-center">
-                  <div class="font-bold text-primary text-lg flex items-center gap-2">
-                    <span class="text-muted text-sm tracking-widest leading-none">#{{ p.playerNumber }}</span>
-                    <span>{{ p.name }}</span>
-                  </div>
-                  <div class="text-xs font-bold text-secondary uppercase tracking-widest mt-0.5">{{ p.role }}</div>
+                <!-- Optional: Show overall score on mobile instead of full stats -->
+                <div class="text-[9px] sm:text-[10px] font-bold text-muted uppercase tracking-widest mt-0.5 max-w-full truncate">
+                   {{ p.overallScore | number:'1.0-0' }} OVR
                 </div>
               </div>
-              <div class="flex items-center gap-6 text-right">
-                <div class="hidden sm:flex text-[10px] gap-3 font-bold text-muted uppercase tracking-widest">
-                  <span title="Batting">BT: {{ p.battingSkill | number:'1.0-0' }}</span>
-                  <span title="Bowling">BW: {{ p.bowlingSkill | number:'1.0-0' }}</span>
-                  <span title="Fielding">FD: {{ p.fieldingSkill | number:'1.0-0' }}</span>
-                  <span title="Wicketkeeping">WK: {{ p.wicketkeepingSkill | number:'1.0-0' }}</span>
-                </div>
-                <div class="text-xl font-black text-primary w-12 text-right">
-                  {{ p.overallScore | number: '1.0-0' }}
-                </div>
+
+               <!-- Drag Handle -->
+              <div cdkDragHandle class="cursor-grab active:cursor-grabbing p-1 flex-shrink-0 text-border hover:text-primary transition-colors touch-none hidden sm:flex">
+                <mat-icon class="scale-75 sm:scale-100">drag_indicator</mat-icon>
               </div>
             </div>
           </div>
@@ -397,6 +382,7 @@ export class SplitComponent {
   matchSelectionStep = signal<boolean>(true);
   selectedPlayerIds = signal<string[]>([]);
   selectedForSwap = signal<{ team: 'A' | 'B', index: number } | null>(null);
+  recentlySwappedIds = signal<string[]>([]);
 
   teamA = signal<Player[]>([]);
   teamB = signal<Player[]>([]);
@@ -557,6 +543,11 @@ export class SplitComponent {
 
     this.teamA.set(newTeamA);
     this.teamB.set(newTeamB);
+
+    this.recentlySwappedIds.set([playerA.id, playerB.id]);
+    setTimeout(() => {
+      this.recentlySwappedIds.set([]); // clear animation state
+    }, 450);
 
     this.selectedForSwap.set(null);
     this.snackBar.open('Players swapped successfully!', 'Close', { duration: 2000, panelClass: ['bg-success-main', 'text-white'] });

@@ -65,11 +65,20 @@
 
   --bg-image: url('/assets/images/cricket-bg-light.png');
 
-  /* Modern Purple to Pink Sidebar */
+  /* Modern Purple to Pink Sidebar (Desktop default) */
   --color-navbar-bg: linear-gradient(180deg, var(--color-primary-dark) 0%, var(--color-secondary-dark) 100%);
   --color-navbar-border: var(--color-primary-dark);
   --color-navbar-text: rgba(255, 255, 255, 0.75);
   --color-navbar-text-hover: #FFFFFF;
   --color-navbar-active: #FFFFFF;
   --color-navbar-indicator: rgba(255, 255, 255, 0.15);
+
+  /* Mobile Bottom Nav Overrides (Light Mode) */
+  @media (max-width: 767px) {
+    --color-navbar-bg: #FFFFFF;
+    --color-navbar-border: var(--color-border-light);
+    --color-navbar-text: var(--color-text-muted);
+    --color-navbar-text-hover: var(--color-text-primary);
+    --color-navbar-active: var(--color-primary-main);
+  }
 }
