@@ -36,23 +36,23 @@ import * as XLSX from 'xlsx';
           <p class="text-secondary text-base">Manage your roster database effortlessly.</p>
         </div>
         
-        <div class="flex flex-wrap items-center gap-2">
+        <div class="flex overflow-x-auto hide-scrollbar snap-x py-1 items-center gap-2 w-full md:w-auto md:flex-wrap md:overflow-visible">
           <!-- Hidden Excel Input -->
           <input #fileInput type="file" accept=".xlsx, .xls" class="hidden" (change)="onFileChange($event)" />
           
-          <button class="btn-secondary !py-1.5 !px-3 shadow-sm !text-sm" (click)="downloadTemplate()">
+          <button class="btn-secondary !py-2 md:!py-1.5 !px-3 shadow-sm !text-[11px] md:!text-sm shrink-0 snap-start flex justify-center items-center" (click)="downloadTemplate()">
             <mat-icon class="!scale-[0.85] mr-1 text-info-main">download</mat-icon> Template
           </button>
           
-          <button class="btn-secondary !py-1.5 !px-3 shadow-sm !text-sm" (click)="fileInput.click()">
+          <button class="btn-secondary !py-2 md:!py-1.5 !px-3 shadow-sm !text-[11px] md:!text-sm shrink-0 snap-start flex justify-center items-center" (click)="fileInput.click()">
             <mat-icon class="!scale-[0.85] mr-1 text-success-main">upload_file</mat-icon> Import Excel
           </button>
           
-          <button class="btn-secondary !py-1.5 !px-3 shadow-sm !text-sm" (click)="exportPlayers()">
+          <button class="btn-secondary !py-2 md:!py-1.5 !px-3 shadow-sm !text-[11px] md:!text-sm shrink-0 snap-start flex justify-center items-center" (click)="exportPlayers()">
             <mat-icon class="!scale-[0.85] mr-1 text-primary-main">ios_share</mat-icon> Export Data
           </button>
           
-          <button class="btn-primary !py-1.5 !px-4 shadow-md flex items-center ml-auto md:ml-2 !text-sm" (click)="toggleForm()">
+          <button class="btn-primary !py-2 md:!py-1.5 !px-4 shadow-md shrink-0 snap-start flex justify-center items-center md:ml-2 !text-sm" (click)="toggleForm()">
             <mat-icon class="!scale-[0.9] mr-1">{{ isFormOpen ? 'close' : 'add' }}</mat-icon>
             {{ isFormOpen ? 'Cancel' : 'Add Player' }}
           </button>

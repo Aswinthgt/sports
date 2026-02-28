@@ -75,6 +75,7 @@ import { ThemeService } from '../../../core/services/theme.service';
     </nav>
   `,
   styles: [`
+    .nav-item, button { -webkit-tap-highlight-color: transparent; outline: none; }
     .nav-item:hover, button:hover { color: var(--color-navbar-text-hover) !important; }
     .active-nav { color: var(--color-navbar-active) !important; font-weight: 900; }
     .nav-item mat-icon { font-variation-settings: 'FILL' 0; transition: all 0.2s ease; }
